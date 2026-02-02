@@ -1,9 +1,9 @@
-# Workshop: บันได 5 ขั้นการเปิดเผยข้อมูลสาธารณะ (5-Star Open Data)
+# Workshop: บันได 5+1 ขั้นการเปิดเผยข้อมูลสาธารณะ (5-Star + AI-Ready)
 
 ## ภาพรวม
 
 Workshop นี้ใช้ข้อมูลชุดเดียวกัน **"สถิติการใช้พลังงานไฟฟ้าตามภูมิภาค ปี 2566"**
-แสดงในรูปแบบต่างๆ ตามระดับความเปิดของข้อมูล
+แสดงในรูปแบบต่างๆ ตามระดับความเปิดของข้อมูล รวมถึง **Level 6: AI-Ready** สำหรับยุค AI
 
 ```
 workshop-data/
@@ -11,7 +11,10 @@ workshop-data/
 ├── level2_structured/      ★★ ข้อมูลมีโครงสร้าง
 ├── level3_open_format/     ★★★ รูปแบบเปิด
 ├── level4_api/             ★★★★ เปิดผ่าน API
-└── level5_linked_data/     ★★★★★ Linked Open Data
+├── level5_linked_data/     ★★★★★ Linked Open Data
+├── level6_ai_ready/        ★★★★★★ AI-Ready Data
+├── docker/                 🐳 Docker Compose
+└── slides/                 📊 Presentation
 ```
 
 ---
@@ -61,7 +64,9 @@ print(df['consumption_gwh'].sum())  # รวมการใช้ไฟฟ้า
 
 ## ★★★ Level 3: รูปแบบเปิด (Open Format)
 
-**ไฟล์:** `level3_open_format/energy_stats_2566.json`
+**ไฟล์:**
+- `level3_open_format/energy_stats_2566.json`
+- `level3_open_format/energy_stats_2566.xml`
 
 ### ลักษณะ
 - ใช้รูปแบบมาตรฐานเปิด (JSON, XML, CSV)
@@ -180,25 +185,157 @@ ORDER BY DESC(?consumption)
 
 ---
 
+## ★★★★★★ Level 6: AI-Ready Government Data
+
+**ไฟล์:**
+- `level6_ai_ready/datacard.md` - Data Card สำหรับ AI
+- `level6_ai_ready/schema.json` - JSON Schema + ML metadata
+- `level6_ai_ready/validation.py` - ตรวจสอบคุณภาพข้อมูล
+- `level6_ai_ready/prepare_data.py` - สร้าง Parquet/Embeddings
+- `level6_ai_ready/data/` - ข้อมูลในรูปแบบ AI-Ready
+- `level6_ai_ready/examples/` - ตัวอย่างการใช้งาน
+
+### ลักษณะ
+- ข้อมูลสะอาด ผ่าน Validation
+- รูปแบบเหมาะกับ ML: Parquet, JSONL
+- มี Data Card อธิบายการใช้งานกับ AI
+- Pre-computed Embeddings สำหรับ Vector Search
+- ตัวอย่างโค้ดพร้อมใช้งาน
+
+### AI-Ready Formats
+| Format | File | Use Case |
+|--------|------|----------|
+| JSONL | `energy_stats.jsonl` | LLM fine-tuning |
+| CSV | `energy_stats_clean.csv` | General ML |
+| Parquet | `energy_stats.parquet` | Big data (generated) |
+| Embeddings | `embeddings.json` | Vector search (generated) |
+
+### ตัวอย่างการใช้งาน
+
+#### Data Analysis
+```python
+import pandas as pd
+df = pd.read_parquet("data/energy_stats.parquet")
+print(df.describe())
+```
+
+#### Machine Learning
+```python
+from sklearn.ensemble import RandomForestRegressor
+model = RandomForestRegressor()
+model.fit(X_train, y_train)
+```
+
+#### RAG Q&A
+```python
+from langchain.chains import RetrievalQA
+qa = RetrievalQA.from_chain_type(llm, retriever=vectorstore.as_retriever())
+answer = qa.run("ภูมิภาคไหนใช้ไฟฟ้ามากที่สุด")
+```
+
+### Quick Start
+```bash
+cd level6_ai_ready
+
+# 1. Validate data
+python validation.py
+
+# 2. Prepare AI-ready formats
+pip install pandas pyarrow sentence-transformers
+python prepare_data.py
+
+# 3. Run examples
+python examples/pandas_analysis.py
+python examples/sklearn_example.py
+python examples/langchain_rag.py
+```
+
+### ข้อดี
+```
+✅ พร้อมใช้กับ AI/ML ทันที
+✅ มี Data Card อธิบาย use cases และ limitations
+✅ Validated data quality
+✅ Pre-computed embeddings สำหรับ RAG
+✅ Working code examples
+```
+
+---
+
+## 🐳 Docker Compose
+
+รัน API + SPARQL endpoint ด้วย Docker:
+
+```bash
+cd docker
+docker-compose up -d
+```
+
+### Services
+| Service | Port | Description |
+|---------|------|-------------|
+| web | 8080 | Web UI + Slides |
+| api | 5000 | REST API (Level 4) |
+| fuseki | 3030 | SPARQL (Level 5) |
+
+---
+
+## 📊 Slides
+
+เปิด slides ได้ที่ `slides/index.html` หรือ:
+
+```bash
+# ด้วย Live Server
+npx serve slides/
+
+# Export เป็น PDF (Marp)
+npm install -g @marp-team/marp-cli
+marp slides/presentation.md -o presentation.pdf
+```
+
+---
+
 ## สรุปเปรียบเทียบ
 
-| ระดับ | รูปแบบ | Machine-Readable | Real-time | Linkable |
-|-------|--------|------------------|-----------|----------|
-| ★ | PDF, Word | ❌ | ❌ | ❌ |
-| ★★ | Excel, CSV | ✅ | ❌ | ❌ |
-| ★★★ | JSON, XML | ✅ | ❌ | ❌ |
-| ★★★★ | REST API | ✅ | ✅ | ❌ |
-| ★★★★★ | RDF, SPARQL | ✅ | ✅ | ✅ |
+| ระดับ | รูปแบบ | Machine | Real-time | Linkable | AI-Ready |
+|-------|--------|---------|-----------|----------|----------|
+| ★ | PDF, Word | ❌ | ❌ | ❌ | ❌ |
+| ★★ | Excel, CSV | ✅ | ❌ | ❌ | ❌ |
+| ★★★ | JSON, XML | ✅ | ❌ | ❌ | ❌ |
+| ★★★★ | REST API | ✅ | ✅ | ❌ | ❌ |
+| ★★★★★ | RDF, SPARQL | ✅ | ✅ | ✅ | ❌ |
+| ★★★★★★ | Parquet, Embeddings | ✅ | ✅ | ✅ | ✅ |
 
 ---
 
 ## แบบฝึกหัด
 
-1. **Level 1 → 2:** แปลงข้อมูลจาก `energy_report_2566.md` เป็น CSV ด้วยมือ
-2. **Level 2 → 3:** เพิ่ม metadata ลงใน CSV ให้กลายเป็น JSON ที่สมบูรณ์
-3. **Level 3 → 4:** รัน API server และลองเรียก API ด้วย curl หรือ Python
-4. **Level 4 → 5:** ลอง query ข้อมูล RDF ด้วย SPARQL (ใช้ Apache Jena หรือ online SPARQL playground)
+| # | หัวข้อ | รายละเอียด |
+|---|--------|------------|
+| 1 | Level 1 → 2 | แปลงข้อมูลจาก Markdown เป็น CSV |
+| 2 | Level 2 → 3 | เพิ่ม metadata ให้ CSV กลายเป็น JSON |
+| 3 | Level 3 → 4 | รัน API server และลองเรียก API |
+| 4 | Level 4 → 5 | Query ข้อมูล RDF ด้วย SPARQL |
+| 5 | Level 5 → 6 | สร้าง Parquet และ RAG Q&A |
 
 ---
 
-*จัดทำสำหรับ Workshop: Open Data 5-Star Model*
+## Roadmap การยกระดับข้อมูล
+
+```
+ปัจจุบัน    ระยะสั้น     ระยะกลาง    ระยะยาว     อนาคต
+   │           │            │           │           │
+   ▼           ▼            ▼           ▼           ▼
+┌─────┐    ┌─────┐      ┌─────┐     ┌─────┐    ┌──────┐
+│  ★  │ ─► │ ★★★ │ ───► │★★★★ │ ──► │★★★★★│ ─► │★★★★★★│
+│ PDF │    │JSON │      │ API │     │ RDF │    │  AI  │
+└─────┘    └─────┘      └─────┘     └─────┘    └──────┘
+```
+
+### แนะนำ
+- เริ่มจาก Level 3 (JSON/CSV with metadata)
+- พัฒนา API (Level 4) สำหรับ real-time access
+- Level 6 (AI-Ready) สำหรับข้อมูลที่จะใช้กับ AI
+
+---
+
+*จัดทำสำหรับ Workshop: 5+1 Star Open Data Model (AI-Ready)*
