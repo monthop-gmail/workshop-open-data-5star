@@ -1,0 +1,6 @@
+region_code,region_th,region_en,year,consumption_gwh,customers,growth_rate,consumption_per_capita,avg_monthly_bill,population
+TH-C,ภาคกลาง,Central,2566,45230.0,8542000,3.2,5294.5,1580.0,8542000
+TH-N,ภาคเหนือ,North,2566,18450.0,4125000,2.8,4472.7,1120.0,4125000
+TH-NE,ภาคตะวันออกเฉียงเหนือ,Northeast,2566,22180.0,7890000,4.1,2811.2,980.0,7890000
+TH-S,ภาคใต้,South,2566,15620.0,3456000,2.5,4520.4,1250.0,3456000
+TH-E,ภาคตะวันออก,East,2566,28970.0,2987000,5.3,9698.7,2150.0,2987000

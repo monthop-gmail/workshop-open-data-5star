@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://data.go.th/schema/energy-stats-2566",
+  "title": "Thailand Regional Electricity Consumption Statistics",
+  "description": "สถิติการใช้พลังงานไฟฟ้าตามภูมิภาค - AI-Ready Format",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "region_code",
+    "region_th",
+    "region_en",
+    "year",
+    "consumption_gwh",
+    "customers",
+    "growth_rate"
+  ],
+  "properties": {
+    "region_code": {
+      "type": "string",
+      "description": "รหัสภูมิภาค (ISO-like)",
+      "enum": ["TH-C", "TH-N", "TH-NE", "TH-S", "TH-E"],
+      "examples": ["TH-NE"]
+    },
+    "region_th": {
+      "type": "string",
+      "description": "ชื่อภูมิภาค (ภาษาไทย)",
+      "minLength": 1,
+      "examples": ["ภาคตะวันออกเฉียงเหนือ"]
+    },
+    "region_en": {
+      "type": "string",
+      "description": "ชื่อภูมิภาค (English)",
+      "pattern": "^[A-Za-z]+$",
+      "examples": ["Northeast"]
+    },
+    "year": {
+      "type": "integer",
+      "description": "ปี พ.ศ.",
+      "minimum": 2500,
+      "maximum": 2600,
+      "examples": [2566]
+    },
+    "consumption_gwh": {
+      "type": "number",
+      "description": "ปริมาณการใช้ไฟฟ้า (GWh)",
+      "minimum": 0,
+      "examples": [22180.0]
+    },
+    "customers": {
+      "type": "integer",
+      "description": "จำนวนผู้ใช้ไฟฟ้า (ราย)",
+      "minimum": 0,
+      "examples": [7890000]
+    },
+    "growth_rate": {
+      "type": "number",
+      "description": "อัตราการเติบโต (%)",
+      "minimum": -100,
+      "maximum": 100,
+      "examples": [4.1]
+    },
+    "consumption_per_capita": {
+      "type": "number",
+      "description": "การใช้ไฟฟ้าต่อหัว (kWh/person)",
+      "minimum": 0
+    },
+    "avg_monthly_bill": {
+      "type": "number",
+      "description": "ค่าไฟเฉลี่ยต่อเดือน (THB)",
+      "minimum": 0
+    },
+    "population": {
+      "type": "integer",
+      "description": "จำนวนประชากร",
+      "minimum": 0
+    }
+  },
+  "ml_metadata": {
+    "target_variables": ["consumption_gwh"],
+    "feature_types": {
+      "categorical": ["region_code"],
+      "numerical": ["customers", "growth_rate", "consumption_per_capita", "avg_monthly_bill"],
+      "text": ["region_th", "region_en"],
+      "temporal": ["year"]
+    },
+    "recommended_preprocessing": {
+      "numerical": "StandardScaler or MinMaxScaler",
+      "categorical": "OneHotEncoder or LabelEncoder",
+      "text": "SentenceTransformer for embeddings"
+    }
+  }
+}
