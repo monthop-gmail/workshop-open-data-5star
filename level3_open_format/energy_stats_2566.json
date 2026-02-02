@@ -1,0 +1,61 @@
+{
+  "metadata": {
+    "title": "สถิติการใช้พลังงานไฟฟ้าตามภูมิภาค",
+    "source": "กรมพัฒนาพลังงานทดแทนและอนุรักษ์พลังงาน (พพ.)",
+    "year": 2566,
+    "unit": {
+      "consumption": "GWh",
+      "customers": "ราย",
+      "growth_rate": "เปอร์เซ็นต์"
+    },
+    "license": "Open Government License - Thailand",
+    "updated": "2567-01-15"
+  },
+  "data": [
+    {
+      "region_code": "TH-C",
+      "region_th": "ภาคกลาง",
+      "region_en": "Central",
+      "consumption_gwh": 45230,
+      "customers": 8542000,
+      "growth_rate": 3.2
+    },
+    {
+      "region_code": "TH-N",
+      "region_th": "ภาคเหนือ",
+      "region_en": "North",
+      "consumption_gwh": 18450,
+      "customers": 4125000,
+      "growth_rate": 2.8
+    },
+    {
+      "region_code": "TH-NE",
+      "region_th": "ภาคตะวันออกเฉียงเหนือ",
+      "region_en": "Northeast",
+      "consumption_gwh": 22180,
+      "customers": 7890000,
+      "growth_rate": 4.1
+    },
+    {
+      "region_code": "TH-S",
+      "region_th": "ภาคใต้",
+      "region_en": "South",
+      "consumption_gwh": 15620,
+      "customers": 3456000,
+      "growth_rate": 2.5
+    },
+    {
+      "region_code": "TH-E",
+      "region_th": "ภาคตะวันออก",
+      "region_en": "East",
+      "consumption_gwh": 28970,
+      "customers": 2987000,
+      "growth_rate": 5.3
+    }
+  ],
+  "summary": {
+    "total_consumption_gwh": 130450,
+    "total_customers": 27000000,
+    "average_growth_rate": 3.58
+  }
+}

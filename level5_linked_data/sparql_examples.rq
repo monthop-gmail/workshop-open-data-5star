@@ -1,0 +1,88 @@
+# =====================================================
+# ตัวอย่าง SPARQL Queries สำหรับ Linked Open Data
+# ใช้กับ Apache Jena, Blazegraph, หรือ SPARQL endpoint อื่นๆ
+# =====================================================
+
+PREFIX energy: <http://data.go.th/def/energy/>
+PREFIX region: <http://data.go.th/resource/region/>
+PREFIX stat: <http://data.go.th/resource/energy-stat/2566/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+
+# -----------------------------------------------------
+# Query 1: ดึงข้อมูลสถิติพลังงานทุกภูมิภาค
+# -----------------------------------------------------
+SELECT ?regionName ?consumption ?customers ?growth
+WHERE {
+    ?stat a energy:EnergyConsumptionStat ;
+          energy:region ?region ;
+          energy:consumptionGWh ?consumption ;
+          energy:numberOfCustomers ?customers ;
+          energy:growthRate ?growth .
+    ?region rdfs:label ?regionName .
+    FILTER (lang(?regionName) = "th")
+}
+ORDER BY DESC(?consumption)
+
+
+# -----------------------------------------------------
+# Query 2: หาภูมิภาคที่มีอัตราเติบโตสูงสุด
+# -----------------------------------------------------
+SELECT ?regionName ?growth
+WHERE {
+    ?stat a energy:EnergyConsumptionStat ;
+          energy:region ?region ;
+          energy:growthRate ?growth .
+    ?region rdfs:label ?regionName .
+    FILTER (lang(?regionName) = "th")
+}
+ORDER BY DESC(?growth)
+LIMIT 1
+
+
+# -----------------------------------------------------
+# Query 3: รวมการใช้ไฟฟ้าทั้งประเทศ
+# -----------------------------------------------------
+SELECT (SUM(?consumption) AS ?totalConsumption) (SUM(?customers) AS ?totalCustomers)
+WHERE {
+    ?stat a energy:EnergyConsumptionStat ;
+          energy:consumptionGWh ?consumption ;
+          energy:numberOfCustomers ?customers .
+}
+
+
+# -----------------------------------------------------
+# Query 4: เชื่อมโยงกับ DBpedia (Federated Query)
+# หาข้อมูลเพิ่มเติมเกี่ยวกับภูมิภาคจาก DBpedia
+# -----------------------------------------------------
+SELECT ?regionName ?consumption ?dbpediaAbstract
+WHERE {
+    ?stat a energy:EnergyConsumptionStat ;
+          energy:region ?region ;
+          energy:consumptionGWh ?consumption .
+    ?region rdfs:label ?regionName ;
+            owl:sameAs ?dbpediaResource .
+    FILTER (lang(?regionName) = "en")
+
+    SERVICE <http://dbpedia.org/sparql> {
+        ?dbpediaResource dbo:abstract ?dbpediaAbstract .
+        FILTER (lang(?dbpediaAbstract) = "en")
+    }
+}
+
+
+# -----------------------------------------------------
+# Query 5: CONSTRUCT - สร้าง RDF ใหม่จากข้อมูลที่มี
+# -----------------------------------------------------
+CONSTRUCT {
+    ?region a dbo:Region ;
+            rdfs:label ?name ;
+            energy:totalConsumption ?consumption .
+}
+WHERE {
+    ?stat energy:region ?region ;
+          energy:consumptionGWh ?consumption .
+    ?region rdfs:label ?name .
+    FILTER (lang(?name) = "th")
+}

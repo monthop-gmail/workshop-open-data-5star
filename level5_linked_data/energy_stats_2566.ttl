@@ -1,0 +1,111 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix sdmx-measure: <http://purl.org/linked-data/sdmx/2009/measure#> .
+@prefix dbr: <http://dbpedia.org/resource/> .
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix energy: <http://data.go.th/def/energy/> .
+@prefix region: <http://data.go.th/resource/region/> .
+@prefix stat: <http://data.go.th/resource/energy-stat/2566/> .
+
+# === Dataset Metadata ===
+<http://data.go.th/dataset/energy-consumption-2566>
+    a dcat:Dataset ;
+    dct:title "สถิติการใช้พลังงานไฟฟ้าตามภูมิภาค ปี 2566"@th ;
+    dct:title "Regional Electricity Consumption Statistics 2566"@en ;
+    dct:publisher <http://data.go.th/organization/dede> ;
+    dct:issued "2567-01-15"^^xsd:date ;
+    dct:license <https://opendefinition.org/licenses/odc-by/> ;
+    dcat:keyword "electricity"@en, "energy"@en, "พลังงาน"@th, "ไฟฟ้า"@th .
+
+# === Organization ===
+<http://data.go.th/organization/dede>
+    a dbo:GovernmentAgency ;
+    rdfs:label "กรมพัฒนาพลังงานทดแทนและอนุรักษ์พลังงาน"@th ;
+    rdfs:label "Department of Alternative Energy Development and Efficiency"@en ;
+    rdfs:seeAlso dbr:Ministry_of_Energy_(Thailand) .
+
+# === Region Definitions (linked to DBpedia) ===
+region:TH-C
+    a dbo:Region ;
+    rdfs:label "ภาคกลาง"@th ;
+    rdfs:label "Central Thailand"@en ;
+    owl:sameAs dbr:Central_Thailand ;
+    dbo:country dbr:Thailand .
+
+region:TH-N
+    a dbo:Region ;
+    rdfs:label "ภาคเหนือ"@th ;
+    rdfs:label "Northern Thailand"@en ;
+    owl:sameAs dbr:Northern_Thailand ;
+    dbo:country dbr:Thailand .
+
+region:TH-NE
+    a dbo:Region ;
+    rdfs:label "ภาคตะวันออกเฉียงเหนือ"@th ;
+    rdfs:label "Northeastern Thailand"@en ;
+    owl:sameAs dbr:Isan ;
+    dbo:country dbr:Thailand .
+
+region:TH-S
+    a dbo:Region ;
+    rdfs:label "ภาคใต้"@th ;
+    rdfs:label "Southern Thailand"@en ;
+    owl:sameAs dbr:Southern_Thailand ;
+    dbo:country dbr:Thailand .
+
+region:TH-E
+    a dbo:Region ;
+    rdfs:label "ภาคตะวันออก"@th ;
+    rdfs:label "Eastern Thailand"@en ;
+    owl:sameAs dbr:Eastern_Thailand ;
+    dbo:country dbr:Thailand .
+
+# === Energy Statistics (Linked Data) ===
+stat:central
+    a energy:EnergyConsumptionStat ;
+    energy:region region:TH-C ;
+    energy:year "2566"^^xsd:gYear ;
+    energy:consumptionGWh "45230"^^xsd:decimal ;
+    energy:numberOfCustomers "8542000"^^xsd:integer ;
+    energy:growthRate "3.2"^^xsd:decimal ;
+    dct:isPartOf <http://data.go.th/dataset/energy-consumption-2566> .
+
+stat:north
+    a energy:EnergyConsumptionStat ;
+    energy:region region:TH-N ;
+    energy:year "2566"^^xsd:gYear ;
+    energy:consumptionGWh "18450"^^xsd:decimal ;
+    energy:numberOfCustomers "4125000"^^xsd:integer ;
+    energy:growthRate "2.8"^^xsd:decimal ;
+    dct:isPartOf <http://data.go.th/dataset/energy-consumption-2566> .
+
+stat:northeast
+    a energy:EnergyConsumptionStat ;
+    energy:region region:TH-NE ;
+    energy:year "2566"^^xsd:gYear ;
+    energy:consumptionGWh "22180"^^xsd:decimal ;
+    energy:numberOfCustomers "7890000"^^xsd:integer ;
+    energy:growthRate "4.1"^^xsd:decimal ;
+    dct:isPartOf <http://data.go.th/dataset/energy-consumption-2566> .
+
+stat:south
+    a energy:EnergyConsumptionStat ;
+    energy:region region:TH-S ;
+    energy:year "2566"^^xsd:gYear ;
+    energy:consumptionGWh "15620"^^xsd:decimal ;
+    energy:numberOfCustomers "3456000"^^xsd:integer ;
+    energy:growthRate "2.5"^^xsd:decimal ;
+    dct:isPartOf <http://data.go.th/dataset/energy-consumption-2566> .
+
+stat:east
+    a energy:EnergyConsumptionStat ;
+    energy:region region:TH-E ;
+    energy:year "2566"^^xsd:gYear ;
+    energy:consumptionGWh "28970"^^xsd:decimal ;
+    energy:numberOfCustomers "2987000"^^xsd:integer ;
+    energy:growthRate "5.3"^^xsd:decimal ;
+    dct:isPartOf <http://data.go.th/dataset/energy-consumption-2566> .
