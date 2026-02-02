@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  # ===========================================
+  # Level 4: REST API (Flask)
+  # ===========================================
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: energy-api
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - ../level3_open_format:/app/data:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - opendata-network
+
+  # ===========================================
+  # Level 5: SPARQL Endpoint (Apache Jena Fuseki)
+  # ===========================================
+  fuseki:
+    image: stain/jena-fuseki:4.9.0
+    container_name: energy-sparql
+    ports:
+      - "3030:3030"
+    environment:
+      - ADMIN_PASSWORD=admin123
+      - JVM_ARGS=-Xmx1g
+    volumes:
+      - fuseki-data:/fuseki
+      - ../level5_linked_data:/staging:ro
+      - ./fuseki-config.ttl:/fuseki-config.ttl:ro
+    networks:
+      - opendata-network
+
+  # ===========================================
+  # Data Loader: โหลด RDF เข้า Fuseki
+  # ===========================================
+  data-loader:
+    image: stain/jena-fuseki:4.9.0
+    container_name: energy-data-loader
+    depends_on:
+      - fuseki
+    volumes:
+      - ../level5_linked_data:/data:ro
+      - ./load-data.sh:/load-data.sh:ro
+    entrypoint: ["/bin/bash", "/load-data.sh"]
+    networks:
+      - opendata-network
+
+  # ===========================================
+  # Web UI: Simple frontend
+  # ===========================================
+  web:
+    image: nginx:alpine
+    container_name: energy-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./web:/usr/share/nginx/html:ro
+      - ../slides:/usr/share/nginx/html/slides:ro
+    depends_on:
+      - api
+      - fuseki
+    networks:
+      - opendata-network
+
+volumes:
+  fuseki-data:
+
+networks:
+  opendata-network:
+    driver: bridge

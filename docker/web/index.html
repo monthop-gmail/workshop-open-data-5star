@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop: 5-Star Open Data Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: linear-gradient(135deg, #1a5f7a 0%, #2c3e50 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: white; text-align: center; margin-bottom: 0.5rem; font-size: 2.5rem; }
+        .subtitle { color: rgba(255,255,255,0.8); text-align: center; margin-bottom: 2rem; }
+
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .card h2 { color: #1a5f7a; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .card h2 .stars { font-size: 1.2rem; }
+
+        .level-4 .stars { color: #27ae60; }
+        .level-5 .stars { color: #2980b9; }
+
+        .endpoint {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .endpoint code {
+            display: block;
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            overflow-x: auto;
+        }
+        .endpoint label { font-weight: 600; color: #666; display: block; margin-bottom: 0.5rem; }
+
+        button {
+            background: #1a5f7a;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+        button:hover { background: #145a70; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+
+        .result {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            max-height: 300px;
+            overflow: auto;
+            font-family: monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+        }
+        .result.loading { color: #f39c12; }
+        .result.error { color: #e74c3c; }
+
+        select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        textarea { min-height: 120px; font-family: monospace; }
+
+        .links { text-align: center; margin-top: 2rem; }
+        .links a {
+            color: white;
+            margin: 0 1rem;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .links a:hover { background: rgba(255,255,255,0.1); border-color: white; }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-api { background: #27ae60; color: white; }
+        .badge-sparql { background: #2980b9; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Workshop: 5-Star Open Data</h1>
+        <p class="subtitle">สถิติการใช้พลังงานไฟฟ้าตามภูมิภาค ปี 2566</p>
+
+        <div class="cards">
+            <!-- Level 4: API -->
+            <div class="card level-4">
+                <h2><span class="stars">★★★★</span> Level 4: REST API</h2>
+
+                <div class="endpoint">
+                    <label>เลือก Endpoint</label>
+                    <select id="apiEndpoint">
+                        <option value="/api/v1/energy/regions">GET /api/v1/energy/regions - ข้อมูลทุกภูมิภาค</option>
+                        <option value="/api/v1/energy/regions/TH-C">GET /api/v1/energy/regions/TH-C - ภาคกลาง</option>
+                        <option value="/api/v1/energy/regions/TH-N">GET /api/v1/energy/regions/TH-N - ภาคเหนือ</option>
+                        <option value="/api/v1/energy/regions/TH-NE">GET /api/v1/energy/regions/TH-NE - ภาคอีสาน</option>
+                        <option value="/api/v1/energy/regions/TH-S">GET /api/v1/energy/regions/TH-S - ภาคใต้</option>
+                        <option value="/api/v1/energy/regions/TH-E">GET /api/v1/energy/regions/TH-E - ภาคตะวันออก</option>
+                        <option value="/api/v1/energy/summary">GET /api/v1/energy/summary - สรุปภาพรวม</option>
+                    </select>
+                </div>
+
+                <button onclick="callApi()">
+                    <span class="badge badge-api">API</span> เรียก API
+                </button>
+
+                <div id="apiResult" class="result">// ผลลัพธ์จะแสดงที่นี่</div>
+            </div>
+
+            <!-- Level 5: SPARQL -->
+            <div class="card level-5">
+                <h2><span class="stars">★★★★★</span> Level 5: SPARQL</h2>
+
+                <div class="endpoint">
+                    <label>SPARQL Query</label>
+                    <textarea id="sparqlQuery">PREFIX energy: <http://data.go.th/def/energy/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?regionName ?consumption ?growth
+WHERE {
+    ?stat a energy:EnergyConsumptionStat ;
+          energy:region ?region ;
+          energy:consumptionGWh ?consumption ;
+          energy:growthRate ?growth .
+    ?region rdfs:label ?regionName .
+    FILTER (lang(?regionName) = "th")
+}
+ORDER BY DESC(?consumption)</textarea>
+                </div>
+
+                <button onclick="callSparql()">
+                    <span class="badge badge-sparql">SPARQL</span> Query
+                </button>
+
+                <div id="sparqlResult" class="result">// ผลลัพธ์จะแสดงที่นี่</div>
+            </div>
+        </div>
+
+        <div class="links">
+            <a href="/slides/">📊 Slides</a>
+            <a href="/fuseki/#/dataset/energy/query" target="_blank">🔍 Fuseki UI</a>
+            <a href="https://github.com/monthop-gmail/workshop-open-data-5star" target="_blank">📁 GitHub</a>
+        </div>
+    </div>
+
+    <script>
+        async function callApi() {
+            const endpoint = document.getElementById('apiEndpoint').value;
+            const resultDiv = document.getElementById('apiResult');
+
+            resultDiv.className = 'result loading';
+            resultDiv.textContent = 'กำลังเรียก API...';
+
+            try {
+                const response = await fetch(endpoint);
+                const data = await response.json();
+                resultDiv.className = 'result';
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function callSparql() {
+            const query = document.getElementById('sparqlQuery').value;
+            const resultDiv = document.getElementById('sparqlResult');
+
+            resultDiv.className = 'result loading';
+            resultDiv.textContent = 'กำลัง Query...';
+
+            try {
+                const response = await fetch('/sparql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Accept': 'application/json'
+                    },
+                    body: 'query=' + encodeURIComponent(query)
+                });
+
+                if (!response.ok) {
+                    throw new Error('SPARQL query failed: ' + response.statusText);
+                }
+
+                const data = await response.json();
+
+                // Format results
+                if (data.results && data.results.bindings) {
+                    const bindings = data.results.bindings;
+                    if (bindings.length === 0) {
+                        resultDiv.textContent = 'ไม่พบข้อมูล';
+                    } else {
+                        // Create table-like output
+                        const vars = data.head.vars;
+                        let output = vars.join('\t') + '\n';
+                        output += '-'.repeat(50) + '\n';
+
+                        bindings.forEach(row => {
+                            const values = vars.map(v => row[v] ? row[v].value : '');
+                            output += values.join('\t') + '\n';
+                        });
+
+                        resultDiv.textContent = output;
+                    }
+                } else {
+                    resultDiv.textContent = JSON.stringify(data, null, 2);
+                }
+
+                resultDiv.className = 'result';
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'Error: ' + error.message + '\n\nตรวจสอบว่า Fuseki พร้อมใช้งานและมีข้อมูลแล้ว';
+            }
+        }
+    </script>
+</body>
+</html>
