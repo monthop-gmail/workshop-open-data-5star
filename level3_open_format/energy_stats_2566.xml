@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<energyStatistics xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <metadata>
+        <title lang="th">สถิติการใช้พลังงานไฟฟ้าตามภูมิภาค</title>
+        <title lang="en">Regional Electricity Consumption Statistics</title>
+        <source>กรมพัฒนาพลังงานทดแทนและอนุรักษ์พลังงาน (พพ.)</source>
+        <year>2566</year>
+        <units>
+            <consumption>GWh</consumption>
+            <customers>ราย</customers>
+            <growthRate>เปอร์เซ็นต์</growthRate>
+        </units>
+        <license>Open Government License - Thailand</license>
+        <updated>2567-01-15</updated>
+    </metadata>
+
+    <regions>
+        <region code="TH-C">
+            <name lang="th">ภาคกลาง</name>
+            <name lang="en">Central</name>
+            <consumptionGWh>45230</consumptionGWh>
+            <customers>8542000</customers>
+            <growthRate>3.2</growthRate>
+        </region>
+
+        <region code="TH-N">
+            <name lang="th">ภาคเหนือ</name>
+            <name lang="en">North</name>
+            <consumptionGWh>18450</consumptionGWh>
+            <customers>4125000</customers>
+            <growthRate>2.8</growthRate>
+        </region>
+
+        <region code="TH-NE">
+            <name lang="th">ภาคตะวันออกเฉียงเหนือ</name>
+            <name lang="en">Northeast</name>
+            <consumptionGWh>22180</consumptionGWh>
+            <customers>7890000</customers>
+            <growthRate>4.1</growthRate>
+        </region>
+
+        <region code="TH-S">
+            <name lang="th">ภาคใต้</name>
+            <name lang="en">South</name>
+            <consumptionGWh>15620</consumptionGWh>
+            <customers>3456000</customers>
+            <growthRate>2.5</growthRate>
+        </region>
+
+        <region code="TH-E">
+            <name lang="th">ภาคตะวันออก</name>
+            <name lang="en">Eastern</name>
+            <consumptionGWh>28970</consumptionGWh>
+            <customers>2987000</customers>
+            <growthRate>5.3</growthRate>
+        </region>
+    </regions>
+
+    <summary>
+        <totalConsumptionGWh>130450</totalConsumptionGWh>
+        <totalCustomers>27000000</totalCustomers>
+        <averageGrowthRate>3.58</averageGrowthRate>
+    </summary>
+
+</energyStatistics>
