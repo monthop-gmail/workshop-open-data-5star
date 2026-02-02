@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop: 5-Star Open Data</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/white.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/monokai.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --r-heading-font: 'Sarabun', sans-serif;
+            --r-main-font: 'Sarabun', sans-serif;
+        }
+        .reveal h1, .reveal h2, .reveal h3 { color: #1a5f7a; }
+        .reveal .slides section { text-align: left; }
+        .reveal .slides section.center { text-align: center; }
+        .reveal pre { font-size: 0.55em; }
+        .reveal table { font-size: 0.7em; margin: 0 auto; }
+        .reveal table th { background: #1a5f7a; color: white; }
+        .star-1 { background: #e74c3c !important; }
+        .star-2 { background: #e67e22 !important; }
+        .star-3 { background: #f39c12 !important; }
+        .star-4 { background: #27ae60 !important; }
+        .star-5 { background: #2980b9 !important; }
+        .title-slide { background: #1a5f7a !important; }
+        .title-slide h1, .title-slide h2, .title-slide p { color: white !important; }
+        .columns { display: flex; gap: 2rem; }
+        .columns > div { flex: 1; }
+        .badge { display: inline-block; padding: 0.2em 0.6em; border-radius: 4px; color: white; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Title Slide -->
+            <section class="center title-slide">
+                <h1>บันได 5 ขั้น</h1>
+                <h1>การเปิดเผยข้อมูลสาธารณะ</h1>
+                <h2>5-Star Open Data Model</h2>
+                <p style="margin-top: 2em;">Workshop สำหรับหน่วยงานภาครัฐ</p>
+            </section>
+
+            <!-- Objectives -->
+            <section>
+                <h2>วัตถุประสงค์</h2>
+                <ul>
+                    <li>เข้าใจ <strong>5-Star Open Data Model</strong> ตามแนวทาง DGA</li>
+                    <li>เห็นความแตกต่างของแต่ละระดับ</li>
+                    <li>ลงมือปฏิบัติจริงกับข้อมูลตัวอย่าง</li>
+                    <li>วางแผนยกระดับข้อมูลของหน่วยงาน</li>
+                </ul>
+            </section>
+
+            <!-- What is Open Data -->
+            <section>
+                <h2>Open Data คืออะไร?</h2>
+                <blockquote>
+                    ข้อมูลที่ <strong>ใครก็ได้</strong> สามารถ <strong>เข้าถึง ใช้งาน และแบ่งปัน</strong> ได้อย่างเสรี
+                </blockquote>
+                <table>
+                    <tr><th>หัวข้อ</th><th>คำอธิบาย</th></tr>
+                    <tr><td><strong>Available</strong></td><td>เข้าถึงได้ผ่านอินเทอร์เน็ต</td></tr>
+                    <tr><td><strong>Machine-readable</strong></td><td>คอมพิวเตอร์อ่านและประมวลผลได้</td></tr>
+                    <tr><td><strong>Open Format</strong></td><td>ไม่ผูกกับซอฟต์แวร์เฉพาะ</td></tr>
+                    <tr><td><strong>Open License</strong></td><td>อนุญาตให้นำไปใช้ต่อได้</td></tr>
+                </table>
+            </section>
+
+            <!-- 5-Star Overview -->
+            <section>
+                <h2>5-Star Model โดย Tim Berners-Lee</h2>
+                <table>
+                    <tr><th>ระดับ</th><th>ลักษณะ</th><th>ตัวอย่าง</th></tr>
+                    <tr><td><span class="badge star-1">★</span></td><td>ข้อมูลบนเว็บ</td><td>PDF, Word</td></tr>
+                    <tr><td><span class="badge star-2">★★</span></td><td>ข้อมูลมีโครงสร้าง</td><td>Excel</td></tr>
+                    <tr><td><span class="badge star-3">★★★</span></td><td>รูปแบบเปิด</td><td>CSV, JSON</td></tr>
+                    <tr><td><span class="badge star-4">★★★★</span></td><td>URI + API</td><td>REST API</td></tr>
+                    <tr><td><span class="badge star-5">★★★★★</span></td><td>Linked Data</td><td>RDF, SPARQL</td></tr>
+                </table>
+            </section>
+
+            <!-- Level 1 Title -->
+            <section class="center star-1">
+                <h1 style="color:white;">★ Level 1</h1>
+                <h2 style="color:white;">ข้อมูลพื้นฐาน (Basic)</h2>
+            </section>
+
+            <!-- Level 1 Content -->
+            <section>
+                <h2><span class="badge star-1">★</span> Level 1: ข้อมูลพื้นฐาน</h2>
+                <div class="columns">
+                    <div>
+                        <h3>รูปแบบ</h3>
+                        <ul>
+                            <li>PDF, Word</li>
+                            <li>รูปภาพ, สแกนเอกสาร</li>
+                        </ul>
+                        <h3>ข้อจำกัด</h3>
+                        <ul>
+                            <li>❌ Copy-paste หรือพิมพ์ใหม่</li>
+                            <li>❌ คำนวณอัตโนมัติไม่ได้</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>ตัวอย่าง</h3>
+                        <pre><code>รายงานสถิติการใช้พลังงานไฟฟ้า ปี 2566
+
+ภาคกลาง: 45,230 ล้านหน่วย
+ภาคเหนือ: 18,450 ล้านหน่วย
+ภาคอีสาน: 22,180 ล้านหน่วย</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Level 2 Title -->
+            <section class="center star-2">
+                <h1 style="color:white;">★★ Level 2</h1>
+                <h2 style="color:white;">ข้อมูลมีโครงสร้าง (Structured)</h2>
+            </section>
+
+            <!-- Level 2 Content -->
+            <section>
+                <h2><span class="badge star-2">★★</span> Level 2: ข้อมูลมีโครงสร้าง</h2>
+                <h3>รูปแบบ: Excel, CSV</h3>
+                <pre><code class="language-csv">region_th,region_en,consumption_gwh,customers,growth_rate
+ภาคกลาง,Central,45230,8542000,3.2
+ภาคเหนือ,North,18450,4125000,2.8
+ภาคอีสาน,Northeast,22180,7890000,4.1</code></pre>
+                <div class="columns">
+                    <div>
+                        <h3>ข้อดี</h3>
+                        <ul>
+                            <li>✅ Import เข้า Excel/Python ได้</li>
+                            <li>✅ คำนวณต่อได้</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>ข้อจำกัด</h3>
+                        <ul>
+                            <li>❌ ยังผูกกับ proprietary format</li>
+                            <li>❌ ไม่มี metadata</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Level 3 Title -->
+            <section class="center star-3">
+                <h1 style="color:white;">★★★ Level 3</h1>
+                <h2 style="color:white;">รูปแบบเปิด (Open Format)</h2>
+            </section>
+
+            <!-- Level 3 Content -->
+            <section>
+                <h2><span class="badge star-3">★★★</span> Level 3: รูปแบบเปิด</h2>
+                <h3>รูปแบบ: JSON, XML, CSV (with metadata)</h3>
+                <pre><code class="language-json">{
+  "metadata": {
+    "source": "กรมพัฒนาพลังงานทดแทนฯ",
+    "license": "Open Government License",
+    "year": 2566
+  },
+  "data": [
+    {"region": "ภาคกลาง", "consumption_gwh": 45230},
+    {"region": "ภาคเหนือ", "consumption_gwh": 18450}
+  ]
+}</code></pre>
+                <p>✅ ไม่ผูกซอฟต์แวร์ | ✅ มี metadata | ✅ ระบุ license ชัดเจน</p>
+            </section>
+
+            <!-- JSON vs XML -->
+            <section>
+                <h2>JSON vs XML</h2>
+                <table>
+                    <tr><th>หัวข้อ</th><th>JSON</th><th>XML</th></tr>
+                    <tr><td>ขนาดไฟล์</td><td>เล็กกว่า</td><td>ใหญ่กว่า</td></tr>
+                    <tr><td>อ่านง่าย</td><td>✅</td><td>ปานกลาง</td></tr>
+                    <tr><td>หลายภาษา</td><td>แยก field</td><td>ใช้ lang attribute</td></tr>
+                    <tr><td>Validation</td><td>JSON Schema</td><td>XSD</td></tr>
+                    <tr><td>เหมาะกับ</td><td>Web API</td><td>Enterprise</td></tr>
+                </table>
+            </section>
+
+            <!-- Level 4 Title -->
+            <section class="center star-4">
+                <h1 style="color:white;">★★★★ Level 4</h1>
+                <h2 style="color:white;">เปิดผ่าน API</h2>
+            </section>
+
+            <!-- Level 4 Content -->
+            <section>
+                <h2><span class="badge star-4">★★★★</span> Level 4: Open with API</h2>
+                <h3>ลักษณะ: REST API / GraphQL</h3>
+                <pre><code class="language-bash"># ดึงข้อมูลภาคอีสาน
+curl https://api.example.go.th/energy/regions/TH-NE
+
+# Response
+{
+  "region": "ภาคตะวันออกเฉียงเหนือ",
+  "consumption_gwh": 22180,
+  "growth_rate": 4.1
+}</code></pre>
+            </section>
+
+            <!-- Level 4 Benefits -->
+            <section>
+                <h2>ข้อดีของ API</h2>
+                <table>
+                    <tr><th>ข้อดี</th><th>คำอธิบาย</th></tr>
+                    <tr><td><strong>Real-time</strong></td><td>ข้อมูลอัปเดตตลอด ไม่ต้องดาวน์โหลดซ้ำ</td></tr>
+                    <tr><td><strong>Selective</strong></td><td>เลือกดึงเฉพาะข้อมูลที่ต้องการ</td></tr>
+                    <tr><td><strong>Integrate</strong></td><td>เชื่อมต่อกับแอปอื่นอัตโนมัติ</td></tr>
+                    <tr><td><strong>Scalable</strong></td><td>รองรับผู้ใช้จำนวนมาก</td></tr>
+                </table>
+                <h3>ตัวอย่าง API ภาครัฐไทย</h3>
+                <p>กรมอุตุนิยมวิทยา | ขสมก. | data.go.th</p>
+            </section>
+
+            <!-- Level 5 Title -->
+            <section class="center star-5">
+                <h1 style="color:white;">★★★★★ Level 5</h1>
+                <h2 style="color:white;">Linked Open Data</h2>
+            </section>
+
+            <!-- Level 5 Content -->
+            <section>
+                <h2><span class="badge star-5">★★★★★</span> Level 5: Linked Open Data</h2>
+                <h3>ลักษณะ</h3>
+                <ul>
+                    <li>ใช้ RDF (Resource Description Framework)</li>
+                    <li>มี URI ระบุตัวตนข้อมูล</li>
+                    <li>เชื่อมโยงกับข้อมูลภายนอก (DBpedia, Wikidata)</li>
+                </ul>
+                <pre><code class="language-turtle">stat:northeast
+    energy:region region:TH-NE ;
+    energy:consumptionGWh "22180" ;
+    owl:sameAs dbr:Isan .  # เชื่อมกับ DBpedia</code></pre>
+            </section>
+
+            <!-- Linked Data Benefits -->
+            <section>
+                <h2>ประโยชน์ของ Linked Data</h2>
+                <h3>Knowledge Graph</h3>
+                <pre><code>[สถิติพลังงาน] ──► [ภาคอีสาน] ──► [DBpedia:Isan]
+                        │
+                        └──► [จังหวัด] ──► [Wikidata]</code></pre>
+                <h3>ข้อดี</h3>
+                <ul>
+                    <li>✅ เชื่อมโยงข้อมูลข้ามหน่วยงาน</li>
+                    <li>✅ Query ด้วย SPARQL</li>
+                    <li>✅ สร้าง Knowledge Graph ได้</li>
+                </ul>
+            </section>
+
+            <!-- Summary Table -->
+            <section>
+                <h2>สรุปเปรียบเทียบ 5 ระดับ</h2>
+                <table>
+                    <tr>
+                        <th>ระดับ</th>
+                        <th>รูปแบบ</th>
+                        <th>Machine</th>
+                        <th>Real-time</th>
+                        <th>Linkable</th>
+                    </tr>
+                    <tr><td><span class="badge star-1">★</span></td><td>PDF</td><td>❌</td><td>❌</td><td>❌</td></tr>
+                    <tr><td><span class="badge star-2">★★</span></td><td>Excel</td><td>✅</td><td>❌</td><td>❌</td></tr>
+                    <tr><td><span class="badge star-3">★★★</span></td><td>JSON/XML</td><td>✅</td><td>❌</td><td>❌</td></tr>
+                    <tr><td><span class="badge star-4">★★★★</span></td><td>API</td><td>✅</td><td>✅</td><td>❌</td></tr>
+                    <tr><td><span class="badge star-5">★★★★★</span></td><td>RDF</td><td>✅</td><td>✅</td><td>✅</td></tr>
+                </table>
+            </section>
+
+            <!-- Roadmap -->
+            <section>
+                <h2>Roadmap การยกระดับข้อมูล</h2>
+                <pre><code>ปัจจุบัน      ระยะสั้น       ระยะกลาง      ระยะยาว
+   │             │              │             │
+   ▼             ▼              ▼             ▼
+┌──────┐    ┌──────┐       ┌──────┐     ┌───────┐
+│  ★   │ ─► │ ★★★  │ ────► │ ★★★★ │ ──► │ ★★★★★ │
+│ PDF  │    │ JSON │       │ API  │     │  RDF  │
+└──────┘    └──────┘       └──────┘     └───────┘</code></pre>
+                <h3>แนะนำ</h3>
+                <ul>
+                    <li>เริ่มจาก Level 3 (JSON/CSV with metadata)</li>
+                    <li>ค่อยๆ พัฒนา API (Level 4)</li>
+                    <li>Linked Data สำหรับข้อมูลสำคัญ</li>
+                </ul>
+            </section>
+
+            <!-- Workshop Title -->
+            <section class="center title-slide">
+                <h1>Hands-on Workshop</h1>
+                <h2>ลงมือปฏิบัติ</h2>
+            </section>
+
+            <!-- Exercises -->
+            <section>
+                <h2>แบบฝึกหัด</h2>
+                <table>
+                    <tr><th>#</th><th>หัวข้อ</th><th>รายละเอียด</th></tr>
+                    <tr><td>1</td><td>Level 1 → 2</td><td>แปลงข้อมูลจาก Markdown เป็น CSV</td></tr>
+                    <tr><td>2</td><td>Level 2 → 3</td><td>เพิ่ม metadata ให้ CSV กลายเป็น JSON</td></tr>
+                    <tr><td>3</td><td>Level 3 → 4</td><td>รัน API server และลองเรียก API</td></tr>
+                    <tr><td>4</td><td>Level 4 → 5</td><td>Query ข้อมูล RDF ด้วย SPARQL</td></tr>
+                </table>
+            </section>
+
+            <!-- Resources -->
+            <section>
+                <h2>Resources</h2>
+                <h3>ไฟล์ตัวอย่าง</h3>
+                <pre><code>github.com/monthop-gmail/workshop-open-data-5star</code></pre>
+                <h3>อ้างอิง</h3>
+                <ul>
+                    <li>5stardata.info</li>
+                    <li>data.go.th</li>
+                    <li>DGA แนวทางการเปิดเผยข้อมูลสาธารณะ</li>
+                </ul>
+            </section>
+
+            <!-- Thank You -->
+            <section class="center title-slide">
+                <h1>ขอบคุณครับ</h1>
+                <h2>Q&A</h2>
+                <p style="margin-top: 2em;">Workshop: 5-Star Open Data</p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/highlight.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: true,
+            plugins: [RevealHighlight]
+        });
+    </script>
+</body>
+</html>
