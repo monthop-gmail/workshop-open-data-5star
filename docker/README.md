@@ -1,12 +1,14 @@
-# Docker Setup: 5-Star Open Data Workshop
+# Docker Setup: 5+1 Star Open Data Workshop (AI-Ready)
 
 ## Services
 
-| Service | Port | Description |
-|---------|------|-------------|
-| **web** | 8080 | Web UI + Slides |
-| **api** | 5000 | REST API (Level 4) |
-| **fuseki** | 3030 | SPARQL Endpoint (Level 5) |
+| Service | Port | Level | Description |
+|---------|------|-------|-------------|
+| **web** | 8080 | - | Web UI + Slides |
+| **api** | 5000 | ★★★★ | REST API (Level 4) |
+| **fuseki** | 3030 | ★★★★★ | SPARQL Endpoint (Level 5) |
+
+> **Level 6 (AI-Ready):** ใช้ไฟล์ใน `level6_ai_ready/` โดยตรง ไม่ต้องรัน Docker
 
 ## Quick Start
 
@@ -23,18 +25,18 @@ docker-compose down
 
 ## URLs
 
-| URL | Description |
-|-----|-------------|
-| http://localhost:8080 | Web UI (Demo) |
-| http://localhost:8080/slides/ | Presentation Slides |
-| http://localhost:5000 | API Documentation |
-| http://localhost:5000/api/v1/energy/regions | API: ข้อมูลทุกภูมิภาค |
-| http://localhost:3030 | Fuseki Admin UI |
-| http://localhost:3030/#/dataset/energy/query | SPARQL Query UI |
+| URL | Level | Description |
+|-----|-------|-------------|
+| http://localhost:8080 | - | Web UI (Demo) |
+| http://localhost:8080/slides/ | - | Presentation Slides |
+| http://localhost:5000 | ★★★★ | API Documentation |
+| http://localhost:5000/api/v1/energy/regions | ★★★★ | API: ข้อมูลทุกภูมิภาค |
+| http://localhost:3030 | ★★★★★ | Fuseki Admin UI |
+| http://localhost:3030/#/dataset/energy/query | ★★★★★ | SPARQL Query UI |
 
 ---
 
-## Level 4: REST API
+## ★★★★ Level 4: REST API
 
 ### Endpoints
 
@@ -56,7 +58,7 @@ curl http://localhost:8080/api/v1/energy/regions
 
 ---
 
-## Level 5: SPARQL
+## ★★★★★ Level 5: SPARQL
 
 ### Query ผ่าน curl
 
@@ -125,6 +127,81 @@ WHERE {
 
 ---
 
+## ★★★★★★ Level 6: AI-Ready
+
+Level 6 ไม่ต้องใช้ Docker แต่ใช้ไฟล์และ Python scripts โดยตรง
+
+### Quick Start
+
+```bash
+cd ../level6_ai_ready
+
+# 1. Validate data
+python validation.py
+
+# 2. Prepare AI-ready formats
+pip install pandas pyarrow sentence-transformers
+python prepare_data.py
+
+# 3. Run examples
+python examples/pandas_analysis.py
+python examples/sklearn_example.py
+python examples/langchain_rag.py
+```
+
+### ไฟล์ที่สำคัญ
+
+| ไฟล์ | รายละเอียด |
+|------|------------|
+| `data/energy_stats.jsonl` | JSONL สำหรับ LLM fine-tuning |
+| `data/energy_stats.parquet` | Parquet สำหรับ ML (generated) |
+| `data/embeddings.json` | Vector embeddings (generated) |
+| `datacard.md` | Data Card สำหรับ AI |
+| `schema.json` | JSON Schema + ML metadata |
+
+### ใช้ร่วมกับ Docker Services
+
+```python
+import requests
+import pandas as pd
+
+# ดึงข้อมูลจาก API (Level 4) แล้วแปลงเป็น AI-Ready
+response = requests.get("http://localhost:5000/api/v1/energy/regions")
+data = response.json()["data"]
+
+# แปลงเป็น DataFrame
+df = pd.DataFrame(data)
+
+# Save as Parquet (AI-Ready)
+df.to_parquet("energy_from_api.parquet")
+
+# ใช้กับ ML
+from sklearn.preprocessing import StandardScaler
+X = df[["customers", "growth_rate"]].values
+X_scaled = StandardScaler().fit_transform(X)
+```
+
+### RAG with API Data
+
+```python
+from langchain.chains import RetrievalQA
+from langchain_community.vectorstores import FAISS
+
+# สร้าง documents จาก API
+response = requests.get("http://localhost:5000/api/v1/energy/regions")
+regions = response.json()["data"]
+
+documents = []
+for r in regions:
+    doc = f"{r['region_th']} มีการใช้ไฟฟ้า {r['consumption_gwh']:,} GWh"
+    documents.append(doc)
+
+# สร้าง vector store และใช้ RAG
+# ... (ดูตัวอย่างเต็มใน level6_ai_ready/examples/langchain_rag.py)
+```
+
+---
+
 ## Troubleshooting
 
 ### ตรวจสอบ Services
@@ -176,7 +253,7 @@ docker-compose up -d
                         │         │
            ┌────────────▼─┐   ┌───▼────────────┐
            │  API (:5000) │   │ Fuseki (:3030) │
-           │   Level 4    │   │    Level 5     │
+           │   ★★★★       │   │    ★★★★★       │
            │  REST API    │   │    SPARQL      │
            └──────────────┘   └───────┬────────┘
                                       │
@@ -184,6 +261,19 @@ docker-compose up -d
                               │  RDF Data      │
                               │  (Turtle)      │
                               └────────────────┘
+
+    ┌─────────────────────────────────────────────────┐
+    │              ★★★★★★ Level 6: AI-Ready           │
+    │  ┌─────────┐  ┌─────────┐  ┌─────────────────┐  │
+    │  │ Parquet │  │  JSONL  │  │   Embeddings    │  │
+    │  └─────────┘  └─────────┘  └─────────────────┘  │
+    │         │           │              │            │
+    │         ▼           ▼              ▼            │
+    │  ┌─────────┐  ┌─────────┐  ┌─────────────────┐  │
+    │  │ Pandas  │  │Fine-tune│  │  RAG / Vector   │  │
+    │  │ sklearn │  │   LLM   │  │     Search      │  │
+    │  └─────────┘  └─────────┘  └─────────────────┘  │
+    └─────────────────────────────────────────────────┘
 ```
 
 ---
@@ -193,3 +283,13 @@ docker-compose up -d
 | Service | Username | Password |
 |---------|----------|----------|
 | Fuseki Admin | admin | admin123 |
+
+---
+
+## Level Summary
+
+| Level | Service | Port | Format |
+|-------|---------|------|--------|
+| ★★★★ | api | 5000 | REST API / JSON |
+| ★★★★★ | fuseki | 3030 | RDF / SPARQL |
+| ★★★★★★ | (local) | - | Parquet / JSONL / Embeddings |
