@@ -27,9 +27,9 @@ style: |
 <!-- _backgroundColor: #1a5f7a -->
 <!-- _color: white -->
 
-# บันได 5 ขั้น
+# บันได 5+1 ขั้น
 # การเปิดเผยข้อมูลสาธารณะ
-## 5-Star Open Data Model
+## 5-Star Open Data + AI-Ready
 
 **Workshop สำหรับหน่วยงานภาครัฐ**
 
@@ -38,6 +38,7 @@ style: |
 # วัตถุประสงค์
 
 - เข้าใจ **5-Star Open Data Model** ตามแนวทาง DGA
+- รู้จัก **Level 6: AI-Ready** สำหรับยุค AI
 - เห็นความแตกต่างของแต่ละระดับ
 - ลงมือปฏิบัติจริงกับข้อมูลตัวอย่าง
 - วางแผนยกระดับข้อมูลของหน่วยงาน
@@ -59,17 +60,16 @@ style: |
 
 ---
 
-# 5-Star Model โดย Tim Berners-Lee
+# 5+1 Star Model
 
-![bg right:40% 80%](https://5stardata.info/images/5-star-steps.png)
-
-| ระดับ | ลักษณะ |
-|-------|--------|
-| ★ | ข้อมูลบนเว็บ (รูปแบบใดก็ได้) |
-| ★★ | ข้อมูลมีโครงสร้าง (Excel) |
-| ★★★ | รูปแบบเปิด (CSV, JSON) |
-| ★★★★ | ใช้ URI ระบุตัวตน + API |
-| ★★★★★ | เชื่อมโยงข้อมูลอื่น (Linked Data) |
+| ระดับ | ลักษณะ | ตัวอย่าง |
+|-------|--------|----------|
+| ★ | ข้อมูลบนเว็บ | PDF, Word |
+| ★★ | ข้อมูลมีโครงสร้าง | Excel |
+| ★★★ | รูปแบบเปิด | CSV, JSON |
+| ★★★★ | URI + API | REST API |
+| ★★★★★ | Linked Data | RDF, SPARQL |
+| ★★★★★★ | **AI-Ready** | Parquet, Embeddings |
 
 ---
 
@@ -265,34 +265,109 @@ stat:northeast
 
 ---
 
-# สรุปเปรียบเทียบ 5 ระดับ
+<!-- _class: lead -->
+<!-- _backgroundColor: #8e44ad -->
+<!-- _color: white -->
 
-| ระดับ | รูปแบบ | Machine | Real-time | Linkable |
-|-------|--------|---------|-----------|----------|
-| ★ | PDF | ❌ | ❌ | ❌ |
-| ★★ | Excel | ✅ | ❌ | ❌ |
-| ★★★ | JSON/XML | ✅ | ❌ | ❌ |
-| ★★★★ | API | ✅ | ✅ | ❌ |
-| ★★★★★ | RDF | ✅ | ✅ | ✅ |
+# ★★★★★★ Level 6
+## AI-Ready Government Data
+
+---
+
+# Level 6: AI-Ready Data
+
+### ลักษณะ
+- ข้อมูลสะอาด ผ่าน Validation
+- รูปแบบเหมาะกับ ML: **Parquet, JSONL**
+- มี **Data Card** อธิบายการใช้งานกับ AI
+- Pre-computed **Embeddings** สำหรับ Vector Search
+
+### ตัวอย่าง
+```python
+# โหลด Parquet สำหรับ ML
+import pandas as pd
+df = pd.read_parquet("energy_stats.parquet")
+
+# ใช้กับ RAG
+from langchain.vectorstores import FAISS
+vectorstore = FAISS.load_local("embeddings/")
+```
+
+---
+
+# องค์ประกอบ AI-Ready Data
+
+| องค์ประกอบ | รายละเอียด |
+|------------|------------|
+| **Data Quality** | Clean, Validated, No missing values |
+| **ML Formats** | Parquet, JSONL, Arrow |
+| **Data Card** | Use cases, Biases, Limitations |
+| **Embeddings** | Vector representations for RAG |
+| **Schema** | JSON Schema + ML metadata |
+| **Examples** | Working code (Pandas, sklearn, LangChain) |
+
+---
+
+# AI Use Cases
+
+### Machine Learning
+- Demand Forecasting (พยากรณ์ความต้องการ)
+- Anomaly Detection (ตรวจจับความผิดปกติ)
+- Classification & Regression
+
+### Generative AI
+- **RAG Q&A System** - ตอบคำถามจากข้อมูล
+- **LLM Fine-tuning** - ปรับ LLM ให้เข้าใจโดเมน
+- **Chatbot** - บริการประชาชน
+
+```python
+qa = RetrievalQA.from_chain_type(llm, retriever=vectorstore.as_retriever())
+answer = qa.run("ภูมิภาคไหนใช้ไฟฟ้ามากที่สุด")
+```
+
+---
+
+# Level 5 vs Level 6
+
+| หัวข้อ | Level 5 (Linked Data) | Level 6 (AI-Ready) |
+|--------|----------------------|-------------------|
+| **เป้าหมาย** | เชื่อมโยงข้อมูล | Train/Run AI |
+| **Format** | RDF, Turtle | Parquet, JSONL |
+| **Query** | SPARQL | SQL, Vector Search |
+| **Metadata** | Ontology, URI | Data Cards, Schema |
+| **ผู้ใช้** | Data Engineers | ML/AI Engineers |
+
+---
+
+# สรุปเปรียบเทียบ 6 ระดับ
+
+| ระดับ | รูปแบบ | Machine | Real-time | Linkable | AI-Ready |
+|-------|--------|---------|-----------|----------|----------|
+| ★ | PDF | ❌ | ❌ | ❌ | ❌ |
+| ★★ | Excel | ✅ | ❌ | ❌ | ❌ |
+| ★★★ | JSON | ✅ | ❌ | ❌ | ❌ |
+| ★★★★ | API | ✅ | ✅ | ❌ | ❌ |
+| ★★★★★ | RDF | ✅ | ✅ | ✅ | ❌ |
+| ★★★★★★ | Parquet | ✅ | ✅ | ✅ | ✅ |
 
 ---
 
 # Roadmap การยกระดับข้อมูล
 
 ```
-ปัจจุบัน        ระยะสั้น         ระยะกลาง        ระยะยาว
-   │               │                │               │
-   ▼               ▼                ▼               ▼
-┌──────┐      ┌──────┐         ┌──────┐       ┌──────┐
-│  ★   │ ───► │ ★★★  │ ──────► │ ★★★★ │ ────► │★★★★★│
-│ PDF  │      │ JSON │         │ API  │       │ RDF  │
-└──────┘      └──────┘         └──────┘       └──────┘
+ปัจจุบัน    ระยะสั้น     ระยะกลาง    ระยะยาว     อนาคต
+   │           │            │           │           │
+   ▼           ▼            ▼           ▼           ▼
+┌─────┐    ┌─────┐      ┌─────┐     ┌─────┐    ┌──────┐
+│  ★  │ ─► │ ★★★ │ ───► │★★★★ │ ──► │★★★★★│ ─► │★★★★★★│
+│ PDF │    │JSON │      │ API │     │ RDF │    │  AI  │
+└─────┘    └─────┘      └─────┘     └─────┘    └──────┘
 ```
 
 ### แนะนำ
 - เริ่มจาก Level 3 (JSON/CSV with metadata)
-- ค่อยๆ พัฒนา API (Level 4)
-- Linked Data สำหรับข้อมูลสำคัญ
+- พัฒนา API (Level 4) สำหรับ real-time
+- **Level 6 (AI-Ready)** สำหรับข้อมูลที่จะใช้กับ AI
 
 ---
 
@@ -307,17 +382,13 @@ stat:northeast
 
 # แบบฝึกหัด
 
-### Exercise 1: Level 1 → 2
-แปลงข้อมูลจากรายงาน Markdown เป็น CSV
-
-### Exercise 2: Level 2 → 3
-เพิ่ม metadata ให้ CSV กลายเป็น JSON ที่สมบูรณ์
-
-### Exercise 3: Level 3 → 4
-รัน API server และลองเรียก API
-
-### Exercise 4: Level 4 → 5
-ลอง query ข้อมูล RDF ด้วย SPARQL
+| # | หัวข้อ | รายละเอียด |
+|---|--------|------------|
+| 1 | Level 1 → 2 | แปลงข้อมูลจาก Markdown เป็น CSV |
+| 2 | Level 2 → 3 | เพิ่ม metadata ให้ CSV กลายเป็น JSON |
+| 3 | Level 3 → 4 | รัน API server และลองเรียก API |
+| 4 | Level 4 → 5 | Query ข้อมูล RDF ด้วย SPARQL |
+| 5 | Level 5 → 6 | สร้าง Parquet และ RAG Q&A |
 
 ---
 
@@ -332,6 +403,8 @@ github.com/monthop-gmail/workshop-open-data-5star
 - 5stardata.info
 - data.go.th
 - DGA แนวทางการเปิดเผยข้อมูลสาธารณะ
+- Google Data Cards
+- HuggingFace Dataset Documentation
 
 ---
 
@@ -342,4 +415,4 @@ github.com/monthop-gmail/workshop-open-data-5star
 # ขอบคุณครับ
 ## Q&A
 
-**Workshop: 5-Star Open Data**
+**Workshop: 5+1 Star Open Data (AI-Ready)**
